@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { imageUpload } from "../../api/utils";
 
@@ -8,9 +8,12 @@ import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
 const SignUp = () => {
-  const { user, loading, createUser, updateUserProfile, signInWithGoogle } =
+  const { loading, createUser, updateUserProfile, signInWithGoogle } =
     useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+  const from = location?.state?.from?.pathname || "/";
   // form submit handle
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +40,7 @@ const SignUp = () => {
       console.log(result);
       //5. get token
       await getToken(result?.user?.email);
-      navigate("/");
+      navigate(from, { replace: true });
       toast.success("signUp successfully");
     } catch (error) {
       console.log(error);
@@ -57,7 +60,7 @@ const SignUp = () => {
       console.log(result);
       //3. get token
       await getToken(result?.user?.email);
-      navigate("/");
+      navigate(from, { replace: true });
       toast.success("signUp successfully");
     } catch (error) {
       console.log(error);
